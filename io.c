@@ -48,50 +48,6 @@ void gk_fclose(FILE *fp)
 
 
 /*************************************************************************/
-/*! This function is a wrapper around the read() function that ensures 
-    that all data is been read, by issuing multiple read requests.
-    The only time when not 'count' items are read is when the EOF has been
-    reached.
-*/
-/*************************************************************************/
-ssize_t gk_read(int fd, void *vbuf, size_t count)
-{
-  char *buf = (char *)vbuf;
-  ssize_t rsize, tsize=count;
-
-  do {
-    if ((rsize = read(fd, buf, tsize)) == -1)
-      return -1;
-    buf   += rsize;
-    tsize -= rsize;
-  } while (tsize > 0 && rsize > 0);
-
-  return count-tsize;
-}
-
-
-/*************************************************************************/
-/*! This function is a wrapper around the write() function that ensures 
-    that all data is been written, by issueing multiple write requests.
-*/
-/*************************************************************************/
-ssize_t gk_write(int fd, void *vbuf, size_t count)
-{
-  char *buf = (char *)vbuf;
-  ssize_t size, tsize=count;
-
-  do {
-    if ((size = write(fd, buf, tsize)) == -1)
-      return -1;
-    buf   += size;
-    tsize -= size;
-  } while (tsize > 0);
-
-  return count;
-}
-
-
-/*************************************************************************/
 /*! This function is the GKlib implementation of glibc's getline()
     function.
     \returns -1 if the EOF has been reached, otherwise it returns the 
