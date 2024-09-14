@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 project(GKlib C)
 
 option(BUILD_SHARED_LIBS "Build shared libraries (.dll/.so) instead of static ones (.lib/.a)" OFF)
@@ -16,16 +16,34 @@ else(MSVC)
   set(win32_sources, "")
 endif(MSVC)
 
-add_library(GKlib ${GKlib_sources} ${win32_sources})
+if (BUILD_SHARED_LIBS)
+  add_library(GKlib SHARED ${GKlib_sources} ${win32_sources})
+else()
+  add_library(GKlib STATIC ${GKlib_sources} ${win32_sources})
+endif()
+target_include_directories(GKlib PUBLIC 
+  $<BUILD_INTERFACE:${GKLIB_PATH}> 
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GKlib>)
+
 
 if(UNIX)
   target_link_libraries(GKlib m)
 endif(UNIX)
 
-include_directories("test")
-add_subdirectory("test")
+enable_testing()
+include(CTest)
+
+include(GNUInstallDirs)
+add_subdirectory(test)
 
 install(TARGETS GKlib
-  ARCHIVE DESTINATION lib/${LINSTALL_PATH}
-  LIBRARY DESTINATION lib/${LINSTALL_PATH})
-install(FILES ${GKlib_includes} DESTINATION include/${HINSTALL_PATH})
+        EXPORT GKlibTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GKlib)
+install(FILES ${GKlib_includes} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/GKlib)
+install(EXPORT GKlibTargets
+        FILE GKlibTargets.cmake
+        NAMESPACE GKlib::
+        DESTINATION cmake)

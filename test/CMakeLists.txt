@@ -13,6 +13,7 @@ add_executable(gkuniq gkuniq.c)
 
 foreach(prog strings gksort fis gkrw gkgraph csrcnv grKx m2mnbrs cmpnbrs splatt2svd gkuniq)
   target_link_libraries(${prog} GKlib)
+  add_test(NAME ${prog} COMMAND ${prog})
 endforeach(prog)
 
 # Install a subset of them
