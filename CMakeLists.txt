@@ -7,6 +7,8 @@ enable_testing()
 include(CTest)
 include(GNUInstallDirs)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+
 get_filename_component(abs "." ABSOLUTE)
 set(GKLIB_PATH ${abs})
 unset(abs)
