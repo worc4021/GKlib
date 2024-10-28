@@ -7,8 +7,6 @@ enable_testing()
 include(CTest)
 include(GNUInstallDirs)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-
 get_filename_component(abs "." ABSOLUTE)
 set(GKLIB_PATH ${abs})
 unset(abs)
@@ -33,6 +31,9 @@ target_include_directories(GKlib
     $<BUILD_INTERFACE:${GKLIB_PATH}> 
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/GKlib>)
 
+set_target_properties(GKlib PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if(UNIX)
   target_link_libraries(GKlib m)
