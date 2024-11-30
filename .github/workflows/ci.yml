@@ -8,8 +8,15 @@ on:
     branches: 
     - master
   workflow_dispatch:
+
+env:
+  WINDOWS_BASEKIT_URL: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/b380d914-366b-4b77-a74a-05e3c38b3514/intel-oneapi-base-toolkit-2025.0.0.882_offline.exe
+  WINDOWS_HPCKIT_URL: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/f07e32fa-b505-4b90-8a79-e328ce9ad9d6/intel-oneapi-hpc-toolkit-2025.0.0.822_offline.exe
+  WINDOWS_CPP_COMPONENTS: intel.oneapi.win.cpp-dpcpp-common
+  CACHE_NUMBER: 5
+
 jobs:
-  Explore-GitHub-Actions:
+  linux-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -27,4 +34,46 @@ jobs:
       run: |
         cmake --build --preset linux-gcc-release-build --target install
       working-directory: ${{ github.workspace }}
+  
+  
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    -     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v3
+    - name: cache install
+      id: cache-install
+      uses: actions/cache@v3
+      with:
+        path: |
+            C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
+            C:\Program Files (x86)\Intel\oneAPI\compiler
+        key: install-${{ env.CACHE_NUMBER }}-${{ env.WINDOWS_HPCKIT_URL }}-${{ env.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('**/scripts/cache_exclude_windows.sh') }}
+    - name: install
+      if: steps.cache-install.outputs.cache-hit != 'true'
+      run: scripts/install_windows.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+    - name: build
+      run: scripts/build_windows.bat c++ $VS_VER $SAMPLES_TAG
+    - name: exclude unused files from cache
+      if: steps.cache-install.outputs.cache-hit != 'true'
+      shell: bash
+      run: scripts/cache_exclude_windows.sh
 
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.29.x'
+    - name: Configure
+      run: |
+        cmake --preset windows-intel-release-config
+      working-directory: ${{ github.workspace }}
+    - name: Build
+      run: |
+        cmake --build --preset windows-intel-release-build --target install
+      working-directory: ${{ github.workspace }}
