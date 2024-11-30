@@ -45,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - id: foo
-        uses: worc4021/hello-world-composite-action@v16
+        uses: worc4021/hello-world-composite-action@v17
         with:
           who-to-greet: 'Mona the Octocat'
       - run: echo random-number "$RANDOM_NUMBER"
