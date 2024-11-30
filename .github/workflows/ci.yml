@@ -16,24 +16,24 @@ env:
   CACHE_NUMBER: 5
 
 jobs:
-  linux-build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup Ninja
-      uses: seanmiddleditch/gha-setup-ninja@master
-    - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v2
-      with:
-        cmake-version: '3.29.x'
-    - name: Configure
-      run: |
-        cmake --preset linux-gcc-release-config
-      working-directory: ${{ github.workspace }}
-    - name: Build
-      run: |
-        cmake --build --preset linux-gcc-release-build --target install
-      working-directory: ${{ github.workspace }}
+  # linux-build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Setup Ninja
+  #     uses: seanmiddleditch/gha-setup-ninja@master
+  #   - name: Setup cmake
+  #     uses: jwlawson/actions-setup-cmake@v2
+  #     with:
+  #       cmake-version: '3.29.x'
+  #   - name: Configure
+  #     run: |
+  #       cmake --preset linux-gcc-release-config
+  #     working-directory: ${{ github.workspace }}
+  #   - name: Build
+  #     run: |
+  #       cmake --build --preset linux-gcc-release-build --target install
+  #     working-directory: ${{ github.workspace }}
   
   
   test:
@@ -45,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - id: foo
-        uses: worc4021/hello-world-composite-action@v5
+        uses: worc4021/hello-world-composite-action@v6
         with:
           who-to-greet: 'Mona the Octocat'
       - run: echo random-number "$RANDOM_NUMBER"
