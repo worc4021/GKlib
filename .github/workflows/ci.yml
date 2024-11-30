@@ -37,16 +37,23 @@ jobs:
   
   
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: 
+        - ubuntu-latest
+        - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - id: foo
-        uses: worc4021/hello-world-composite-action@v2
+        uses: worc4021/hello-world-composite-action@v3
         with:
           who-to-greet: 'Mona the Octocat'
       - run: echo random-number "$RANDOM_NUMBER"
         shell: bash
         env:
           RANDOM_NUMBER: ${{ steps.foo.outputs.random-number }}
+
+
 
   # windows-build:
   #   runs-on: windows-latest
