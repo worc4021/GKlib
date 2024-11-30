@@ -38,8 +38,6 @@ jobs:
   
   windows-build:
     runs-on: windows-latest
-    steps:
-    -     runs-on: windows-latest
     defaults:
       run:
         shell: bash
