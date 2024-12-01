@@ -73,7 +73,7 @@ jobs:
       working-directory: ${{ github.workspace }}
     - name: Configure
       run: |
-        C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
+        'C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat'
         cmake --preset windows-intel-release-config
       working-directory: ${{ github.workspace }}
       shell: cmd
