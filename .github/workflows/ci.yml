@@ -69,7 +69,8 @@ jobs:
       with:
         cmake-version: '3.29.x'
     - name: Install Intel oneAPI
-      run: ${{ github.workspace }}/.github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+      run: .github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+      working-directory: ${{ github.workspace }}
     - name: Configure
       run: |
         C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
