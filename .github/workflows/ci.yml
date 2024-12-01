@@ -83,7 +83,7 @@ jobs:
         retention-days: 1
     - name: Configure
       run: |
-        %TEMP%\oneAPI\setvars-vcvarsall.bat
+        %TEMP%\oneAPI\setvars-vcvarsall.bat &&
         cmake --preset windows-intel-release-config
       working-directory: ${{ github.workspace }}
       shell: cmd
