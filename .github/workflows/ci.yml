@@ -72,18 +72,21 @@ jobs:
       run: |
         .github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
       working-directory: ${{ github.workspace }}
-    - name: Saving install logs
-      uses: actions/upload-artifact@v3
-      with:
-        name: InstallLogs_${{ github.job }}
-        path: |
-          extract.log
-          bootstrapper*
-          installer*
-        retention-days: 1
+    # - name: Saving install logs
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: InstallLogs_${{ github.job }}
+    #     path: |
+    #       extract.log
+    #       bootstrapper*
+    #       installer*
+    #     retention-days: 1
+    - name: Set up variables
+      run: |
+        %TEMP%\oneAPI\setvars-vcvarsall.bat
+      shell: cmd
     - name: Configure
       run: |
-        %TEMP%\oneAPI\setvars-vcvarsall.bat &&
         cmake --preset windows-intel-release-config
       working-directory: ${{ github.workspace }}
       shell: cmd
