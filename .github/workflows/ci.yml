@@ -76,8 +76,10 @@ jobs:
         C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
         cmake --preset windows-intel-release-config
       working-directory: ${{ github.workspace }}
+      shell: cmd
     - name: Build
       run: |
         cmake --build --preset windows-intel-release-build --target install
       working-directory: ${{ github.workspace }}
+      shell: cmd
   
