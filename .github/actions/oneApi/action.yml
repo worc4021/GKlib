@@ -23,8 +23,7 @@ runs:
     uses: actions/cache@v4
     with:
       path: |
-          C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
-          C:\Program Files (x86)\Intel\oneAPI\compiler
+          C:\Program Files (x86)\Intel
       key: install-${{ inputs.WINDOWS_HPCKIT_URL }}-${{ inputs.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('${{ github.action_path }}/action.yml') }}
   
   - name: Install Intel oneAPI
