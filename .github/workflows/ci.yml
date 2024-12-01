@@ -73,4 +73,9 @@ jobs:
         cmake --build --preset windows-intel-release-build --target install
       working-directory: ${{ github.workspace }}
       shell: cmd
+    - name: Upload library
+      uses: actions/upload-artifact@v4
+      with:
+        name: gklib-windows-intel
+        path: ${{ github.workspace }}/out/install/windows-intel-release-config
   
