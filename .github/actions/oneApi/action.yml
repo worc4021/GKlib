@@ -1,0 +1,40 @@
+name: oneApo
+description: Install Intel oneAPI
+inputs:
+  WINDOWS_BASEKIT_URL: 
+    description: 'URL to download the Intel oneAPI Base Toolkit for Windows'
+    default: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/b380d914-366b-4b77-a74a-05e3c38b3514/intel-oneapi-base-toolkit-2025.0.0.882_offline.exe
+    required: false
+  WINDOWS_HPCKIT_URL: 
+    description: 'URL to download the Intel oneAPI HPC Toolkit for Windows'
+    default: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/f07e32fa-b505-4b90-8a79-e328ce9ad9d6/intel-oneapi-hpc-toolkit-2025.0.0.822_offline.exe
+    required: false
+  WINDOWS_CPP_COMPONENTS: 
+    description: 'Components to install for Intel oneAPI C++ compiler for Windows'
+    default: intel.oneapi.win.cpp-dpcpp-common
+    required: false
+
+runs:
+  using: composite
+  steps:
+  - uses: actions/checkout@v4
+  - name: Check cache for Intel oneAPI
+    id: cache-install
+    uses: actions/cache@v4
+    with:
+      path: |
+          C:\Program Files (x86)\Intel
+      key: install-${{ inputs.WINDOWS_HPCKIT_URL }}-${{ inputs.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('${{ github.action_path }}/action.yml') }}
+  
+  - name: Install Intel oneAPI
+    if: steps.cache-install.outputs.cache-hit != 'true'
+    run: |
+      install-oneAPI.bat ${{ inputs.WINDOWS_HPCKIT_URL }}  ${{ inputs.WINDOWS_CPP_COMPONENTS }}
+    working-directory: ${{ github.action_path }}
+    shell: cmd
+
+  - name: Set up variables
+    run: |
+      updateEnv.bat
+    shell: cmd
+    working-directory: ${{ github.action_path }}

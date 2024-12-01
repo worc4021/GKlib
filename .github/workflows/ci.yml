@@ -8,8 +8,9 @@ on:
     branches: 
     - master
   workflow_dispatch:
+
 jobs:
-  Explore-GitHub-Actions:
+  linux-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -27,4 +28,40 @@ jobs:
       run: |
         cmake --build --preset linux-gcc-release-build --target install
       working-directory: ${{ github.workspace }}
+    - name: Upload library
+      uses: actions/upload-artifact@v4
+      with:
+        name: gklib-linux-gcc
+        path: ${{ github.workspace }}/out/install/linux-gcc-release-config
+ 
 
+  windows-build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.29.x'
+    - uses: worc4021/oneApi@v1
+    - name: Configure
+      run: |
+        cmake --preset windows-intel-release-config
+      working-directory: ${{ github.workspace }}
+      shell: cmd
+    - name: Build
+      run: |
+        cmake --build --preset windows-intel-release-build --target install
+      working-directory: ${{ github.workspace }}
+      shell: cmd
+    - name: Upload library
+      uses: actions/upload-artifact@v4
+      with:
+        name: gklib-windows-intel
+        path: ${{ github.workspace }}/out/install/windows-intel-release-config
+  
