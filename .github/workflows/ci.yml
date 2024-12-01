@@ -36,61 +36,47 @@ jobs:
   #     working-directory: ${{ github.workspace }}
   
   
-  test:
-    strategy:
-      matrix:
-        os: 
-        - ubuntu-latest
-        - windows-latest
-    runs-on: ${{ matrix.os }}
-    steps:
-      - id: foo
-        uses: worc4021/hello-world-composite-action@v17
-        with:
-          who-to-greet: 'Mona the Octocat'
-      - run: echo random-number "$RANDOM_NUMBER"
-        shell: bash
-        env:
-          RANDOM_NUMBER: ${{ steps.foo.outputs.random-number }}
-
-
-
-  # windows-build:
-  #   runs-on: windows-latest
-  #   defaults:
-  #     run:
-  #       shell: bash
+  # test:
+  #   strategy:
+  #     matrix:
+  #       os: 
+  #       - ubuntu-latest
+  #       - windows-latest
+  #   runs-on: ${{ matrix.os }}
   #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: cache install
-  #     id: cache-install
-  #     uses: actions/cache@v3
-  #     with:
-  #       path: |
-  #           C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
-  #           C:\Program Files (x86)\Intel\oneAPI\compiler
-  #       key: install-${{ env.CACHE_NUMBER }}-${{ env.WINDOWS_HPCKIT_URL }}-${{ env.WINDOWS_CPP_COMPONENTS }}-compiler-${{ hashFiles('**/scripts/cache_exclude_windows.sh') }}
-  #   - name: install
-  #     if: steps.cache-install.outputs.cache-hit != 'true'
-  #     run: scripts/install_windows.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
-  #   - name: build
-  #     run: scripts/build_windows.bat c++ $VS_VER $SAMPLES_TAG
-  #   - name: exclude unused files from cache
-  #     if: steps.cache-install.outputs.cache-hit != 'true'
-  #     shell: bash
-  #     run: scripts/cache_exclude_windows.sh
+  #     - id: foo
+  #       uses: worc4021/hello-world-composite-action@v17
+  #       with:
+  #         who-to-greet: 'Mona the Octocat'
+  #     - run: echo random-number "$RANDOM_NUMBER"
+  #       shell: bash
+  #       env:
+  #         RANDOM_NUMBER: ${{ steps.foo.outputs.random-number }}
 
-  #   - name: Setup Ninja
-  #     uses: seanmiddleditch/gha-setup-ninja@master
-  #   - name: Setup cmake
-  #     uses: jwlawson/actions-setup-cmake@v2
-  #     with:
-  #       cmake-version: '3.29.x'
-  #   - name: Configure
-  #     run: |
-  #       cmake --preset windows-intel-release-config
-  #     working-directory: ${{ github.workspace }}
-  #   - name: Build
-  #     run: |
-  #       cmake --build --preset windows-intel-release-build --target install
-  #     working-directory: ${{ github.workspace }}
+
+
+  windows-build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.29.x'
+    - name: Install Intel oneAPI
+      run: ${{ github.workspace }}/.github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+    - name: Configure
+      run: |
+        C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat
+        cmake --preset windows-intel-release-config
+      working-directory: ${{ github.workspace }}
+    - name: Build
+      run: |
+        cmake --build --preset windows-intel-release-build --target install
+      working-directory: ${{ github.workspace }}
+  
