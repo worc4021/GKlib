@@ -1,0 +1,15 @@
+name: oneApo
+description: Install Intel oneAPI
+runs:
+  using: composite
+  steps:
+  - uses: actions/checkout@v4
+  - name: Install Intel oneAPI
+    run: |
+      install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+    working-directory: ${{ github.action_path }}
+  - name: Set up variables
+    run: |
+      updateEnv.bat
+    shell: cmd
+    working-directory: ${{ github.action_path }}

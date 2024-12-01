@@ -68,10 +68,10 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.29.x'
-    - name: Install Intel oneAPI
-      run: |
-        .github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
-      working-directory: ${{ github.workspace }}
+    # - name: Install Intel oneAPI
+    #   run: |
+    #     .github/actions/install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
+    #   working-directory: ${{ github.workspace }}
     # - name: Saving install logs
     #   uses: actions/upload-artifact@v3
     #   with:
@@ -81,10 +81,11 @@ jobs:
     #       bootstrapper*
     #       installer*
     #     retention-days: 1
-    - name: Set up variables
-      run: |
-        .github\actions\updateEnv.bat
-      shell: cmd
+    # - name: Set up variables
+    #   run: |
+    #     .github\actions\updateEnv.bat
+    #   shell: cmd
+    - uses: ./.github/actions/oneApi
     - name: Configure
       run: |
         cmake --preset windows-intel-release-config
