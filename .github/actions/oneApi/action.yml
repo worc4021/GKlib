@@ -8,6 +8,7 @@ runs:
     run: |
       install-oneAPI.bat $WINDOWS_HPCKIT_URL $WINDOWS_CPP_COMPONENTS
     working-directory: ${{ github.action_path }}
+    shell: cmd
   - name: Set up variables
     run: |
       updateEnv.bat
