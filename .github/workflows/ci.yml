@@ -20,7 +20,7 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.29.x'
-    - uses: worc4021/oneApi@v5
+    - uses: worc4021/oneApi@v6
       with:
         icx: true
     - name: Configure
@@ -51,7 +51,7 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.29.x'
-    - uses: worc4021/oneApi@v5
+    - uses: worc4021/oneApi@v6
       with:
         icx: true
     - name: Configure
