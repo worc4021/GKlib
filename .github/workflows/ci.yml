@@ -22,17 +22,17 @@ jobs:
         cmake-version: '3.29.x'
     - name: Configure
       run: |
-        cmake --preset linux-gcc-release-config
+        cmake --preset linux-intel-release-config
       working-directory: ${{ github.workspace }}
     - name: Build
       run: |
-        cmake --build --preset linux-gcc-release-build --target install
+        cmake --build --preset linux-intel-release-build --target install
       working-directory: ${{ github.workspace }}
     - name: Upload library
       uses: actions/upload-artifact@v4
       with:
-        name: gklib-linux-gcc
-        path: ${{ github.workspace }}/out/install/linux-gcc-release-config
+        name: gklib-linux-intel
+        path: ${{ github.workspace }}/out/install/linux-intel-release-config
  
 
   windows-build:
