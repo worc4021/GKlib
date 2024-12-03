@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: worc4021/oneApi@v6
+      with:
+        icx: true
     - name: Setup Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.29.x'
-    - uses: worc4021/oneApi@v6
-      with:
-        icx: true
     - name: Configure
       run: |
         cmake --preset linux-intel-release-config
@@ -45,15 +45,15 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v3
+    - uses: worc4021/oneApi@v6
+      with:
+        icx: true
     - name: Setup Ninja
       uses: seanmiddleditch/gha-setup-ninja@master
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.29.x'
-    - uses: worc4021/oneApi@v6
-      with:
-        icx: true
     - name: Configure
       run: |
         cmake --preset windows-intel-release-config
