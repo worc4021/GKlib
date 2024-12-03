@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: worc4021/oneApi@v6
+    - uses: worc4021/oneApi@v7
       with:
         icx: true
     - name: Setup Ninja
@@ -45,7 +45,7 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v3
-    - uses: worc4021/oneApi@v6
+    - uses: worc4021/oneApi@v7
       with:
         icx: true
     - name: Setup Ninja
