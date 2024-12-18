@@ -11,10 +11,16 @@ on:
 
 jobs:
   linux-build:
+    strategy:
+      matrix:
+        toolchain: 
+        - gcc
+        - intel
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: worc4021/oneApi@v7
+      if: ${{ matrix.toolchain == 'intel' }}
       with:
         icx: true
     - name: Setup Ninja
@@ -25,17 +31,17 @@ jobs:
         cmake-version: '3.29.x'
     - name: Configure
       run: |
-        cmake --preset linux-intel-release-config
+        cmake --preset linux-${{ matrix.toolchain }}-release-config
       working-directory: ${{ github.workspace }}
     - name: Build
       run: |
-        cmake --build --preset linux-intel-release-build --target install
+        cmake --build --preset linux-${{ matrix.toolchain }}-release-build --target install
       working-directory: ${{ github.workspace }}
     - name: Upload library
       uses: actions/upload-artifact@v4
       with:
-        name: gklib-linux-intel
-        path: ${{ github.workspace }}/out/install/linux-intel-release-config
+        name: gklib-linux-${{ matrix.toolchain }}
+        path: ${{ github.workspace }}/out/install/linux-${{ matrix.toolchain }}-release-config
  
 
   windows-build:
