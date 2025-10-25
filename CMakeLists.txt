@@ -73,7 +73,7 @@ target_include_directories(${PROJECT_NAME}
          $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(${PROJECT_NAME}
-  PUBLIC $<$<NOT:$<C_COMPILER_ID:MSVC>>:m>)
+  PUBLIC $<$<NOT:$<PLATFORM_ID:Windows>>:m>)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
   SOVERSION ${PROJECT_VERSION_MAJOR}
