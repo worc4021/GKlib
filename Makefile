@@ -11,6 +11,7 @@ valgrind = not-set
 pcre     = not-set
 gkregex  = not-set
 gkrand   = not-set
+shared   = not-set
 
 
 # Basically proxies everything to the builddir cmake.
@@ -46,10 +47,10 @@ ifneq ($(pcre), not-set)
     CONFIG_FLAGS += -DPCRE=$(pcre)
 endif
 ifneq ($(gkregex), not-set)
-    CONFIG_FLAGS += -DGKREGEX=$(pcre)
+    CONFIG_FLAGS += -DGKREGEX=$(gkregex)
 endif
 ifneq ($(gkrand), not-set)
-    CONFIG_FLAGS += -DGKRAND=$(pcre)
+    CONFIG_FLAGS += -DGKRAND=$(gkrand)
 endif
 ifneq ($(prefix), not-set)
     CONFIG_FLAGS += -DCMAKE_INSTALL_PREFIX=$(prefix)
@@ -59,6 +60,15 @@ ifneq ($(cc), not-set)
 endif
 ifneq ($(cputype), x86_64)
     CONFIG_FLAGS += -DNO_X86=$(cputype)
+endif
+ifeq ($(systype), Darwin)
+    sysroot = $(shell $(cc) -print-sysroot || echo not-set)
+    ifneq ($(sysroot), not-set)
+	CONFIG_FLAGS += -DCMAKE_OSX_SYSROOT=$(sysroot)
+    endif
+endif
+ifneq ($(shared), not-set)
+    CONFIG_FLAGS += -DSHARED=1
 endif
 
 define run-config
