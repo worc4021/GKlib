@@ -29,6 +29,9 @@ option(VALGRID "enable valgrind support" OFF)
 option(NO_X86 "enable no-x86 support" OFF)
 option(SHARED "enable shared support" OFF)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   option(GKLIB_BUILD_APPS "build the GKlib applications" ON)
 else()
